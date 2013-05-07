@@ -7,13 +7,14 @@ getVote(){
 
 echo -n 'Watching Petition: '
 echo $1|awk -F "/" '{print $5}' |sed 's/-/\ /g'
-votePrevious=0
+votePrevious=-1
 while [ 1 ];do
 	timeStamp=$(date +%H%M%N)
 	votesNow=$(getVote $1)
+	echo -n "[$(date -R)]: "
 	echo -n "$votesNow votes"
 	voteRate=$(($votesNow-$votePrevious))
-	echo ", $voteRate votes per min"
+	[ $votePrevious -eq '-1' ] && echo || echo ", $voteRate votes per min"
 	votePrevious=$votesNow
 	rm /tmp/$timeStamp
 	sleep 60
